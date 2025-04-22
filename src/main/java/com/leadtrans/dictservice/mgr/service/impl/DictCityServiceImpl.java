@@ -119,6 +119,14 @@ public class DictCityServiceImpl implements DictCityService {
         dictCityMapper.updateById(entity);
     }
 
+    @Override
+    public List<DictCityEntity> findByNumCodes(List<String> cityNumCodes){
+        if(CollectionUtils.isEmpty(cityNumCodes)){
+            return List.of();
+        }
+        List<DictCityEntity> dictCityEntities = dictCityMapper.selectList(new LambdaQueryWrapper<DictCityEntity>().in(DictCityEntity::getNumCode, cityNumCodes));
+        return dictCityEntities;
+    }
 
     private void fillNames(Collection<DictCityRespVO> cityRespVOS){
         if(CollectionUtils.isEmpty(cityRespVOS)){

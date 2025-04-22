@@ -5,10 +5,7 @@ import com.leadtrans.dictservice.common.enums.StatusEnum;
 import com.leadtrans.dictservice.common.enums.SupplierTypeEnum;
 import com.leadtrans.dictservice.common.vo.PageResult;
 import com.leadtrans.dictservice.mgr.controller.vo.*;
-import com.leadtrans.dictservice.mgr.service.DictCityService;
-import com.leadtrans.dictservice.mgr.service.DictCountryService;
-import com.leadtrans.dictservice.mgr.service.DictStateService;
-import com.leadtrans.dictservice.mgr.service.OptionService;
+import com.leadtrans.dictservice.mgr.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -25,6 +22,8 @@ public class OptionServiceImpl implements OptionService {
     private DictStateService dictStateService;
     @Autowired
     private DictCityService dictCityService;
+    @Autowired
+    private GlobalAreaService globalAreaService;
 
     @Override
     public Map<String, List<OptionRespVO>> getOptions(Map<String, Map<String,String>> reqVO) {
@@ -77,6 +76,14 @@ public class OptionServiceImpl implements OptionService {
             pageReqVO.setPageSize(1000000);
             PageResult<DictCityRespVO> page = dictCityService.page(pageReqVO);
             return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn())).collect(Collectors.toList());
+        });
+
+        builders.put("globalAreas", parameters -> {
+            GlobalAreaPageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), GlobalAreaPageReqVO.class);
+            pageReqVO.setPageNum(1);
+            pageReqVO.setPageSize(1000000);
+            PageResult<GlobalAreaRespVO> page = globalAreaService.page(pageReqVO);
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getId(), e.getName())).collect(Collectors.toList());
         });
     }
 
