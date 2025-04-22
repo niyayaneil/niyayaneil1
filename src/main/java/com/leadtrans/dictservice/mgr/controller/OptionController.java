@@ -23,7 +23,7 @@ public class OptionController {
     private OptionService optionService;
 
     @PostMapping
-    @ApiOperation(value = "查询下拉选项", notes = "[isValids,supplierTypes,countries,states,cities]")
+    @ApiOperation(value = "查询下拉选项", notes = "[isValids,supplierTypes,countries,states,cities,globalAreas,globalPortAttris]")
     public ResultVO<Map<String, List<OptionRespVO>>> getOptions(@RequestBody Map<String, Map<String,String>> reqVO) {
         return ResultVO.success(optionService.getOptions(reqVO));
     }

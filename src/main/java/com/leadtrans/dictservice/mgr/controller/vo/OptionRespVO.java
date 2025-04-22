@@ -12,7 +12,11 @@ public class OptionRespVO<T> {
 
     @ApiModelProperty(value = "选项值")
     private T value;
-    @ApiModelProperty(value = "显示名")
+
+    @ApiModelProperty(value = "选项名称")
+    private String name;
+
+    @ApiModelProperty(value = "选项显示")
     private String label;
 
 

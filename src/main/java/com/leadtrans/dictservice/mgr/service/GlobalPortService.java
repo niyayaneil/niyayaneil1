@@ -15,6 +15,8 @@ public interface GlobalPortService {
 
     GlobalPortRespVO getById(Long id);
 
+    GlobalPortRespVO getByCode(String code);
+
     PageResult<GlobalPortRespVO> page(GlobalPortPageReqVO reqVO);
 
     void updateValid(Long id, String isValid);

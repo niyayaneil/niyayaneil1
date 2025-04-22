@@ -24,6 +24,8 @@ public class OptionServiceImpl implements OptionService {
     private DictCityService dictCityService;
     @Autowired
     private GlobalAreaService globalAreaService;
+    @Autowired
+    private GlobalPortAttriService globalPortAttriService;
 
     @Override
     public Map<String, List<OptionRespVO>> getOptions(Map<String, Map<String,String>> reqVO) {
@@ -48,34 +50,37 @@ public class OptionServiceImpl implements OptionService {
     private void registerBuilders() {
         builders.put("isValids", parameters ->
                 Arrays.stream(StatusEnum.values())
-                        .map(e -> new OptionRespVO<>(e.getCode(), e.getName()))
+                        .map(e -> new OptionRespVO<>(e.getCode(), e.getName(), e.getName()))
                         .collect(Collectors.toList())
         );
         builders.put("supplierTypes", parameters ->
                 Arrays.stream(SupplierTypeEnum.values())
-                        .map(e -> new OptionRespVO<>(e.getCode(), e.getName()))
+                        .map(e -> new OptionRespVO<>(e.getCode(), e.getName(), e.getName()))
                         .collect(Collectors.toList())
         );
         builders.put("countries", parameters ->{
             DictCountryPageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictCountryPageReqVO.class);
             pageReqVO.setPageNum(1);
             pageReqVO.setPageSize(1000000);
+            pageReqVO.setOrderBys(List.of("nameEn:asc"));
             PageResult<DictCountryRespVO> page = dictCountryService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn())).collect(Collectors.toList());
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",e.getNameCn(),e.getNameEn(),e.getNumCode()))).collect(Collectors.toList());
         });
         builders.put("states", parameters ->{
                 DictStatePageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictStatePageReqVO.class);
                 pageReqVO.setPageNum(1);
                 pageReqVO.setPageSize(1000000);
+                pageReqVO.setOrderBys(List.of("nameEn:asc"));
                 PageResult<DictStateRespVO> page = dictStateService.page(pageReqVO);
-                return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn())).collect(Collectors.toList());
+                return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",e.getNameCn(),e.getNameEn(),e.getNumCode()))).collect(Collectors.toList());
          });
         builders.put("cities", parameters -> {
             DictCityPageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictCityPageReqVO.class);
             pageReqVO.setPageNum(1);
             pageReqVO.setPageSize(1000000);
+            pageReqVO.setOrderBys(List.of("nameEn:asc"));
             PageResult<DictCityRespVO> page = dictCityService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn())).collect(Collectors.toList());
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",e.getNameCn(),e.getNameEn(),e.getNumCode()))).collect(Collectors.toList());
         });
 
         builders.put("globalAreas", parameters -> {
@@ -83,7 +88,15 @@ public class OptionServiceImpl implements OptionService {
             pageReqVO.setPageNum(1);
             pageReqVO.setPageSize(1000000);
             PageResult<GlobalAreaRespVO> page = globalAreaService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getId(), e.getName())).collect(Collectors.toList());
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getId(), e.getName(), e.getName())).collect(Collectors.toList());
+        });
+
+        builders.put("globalPortAttris", parameters -> {
+            GlobalPortAttriPageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), GlobalPortAttriPageReqVO.class);
+            pageReqVO.setPageNum(1);
+            pageReqVO.setPageSize(1000000);
+            PageResult<GlobalPortAttriRespVO> page = globalPortAttriService.page(pageReqVO);
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getId(), e.getName(), e.getName())).collect(Collectors.toList());
         });
     }
 

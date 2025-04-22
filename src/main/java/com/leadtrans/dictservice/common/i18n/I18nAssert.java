@@ -6,6 +6,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.Assert;
 
+import java.util.Collection;
+
 public final class I18nAssert {
 
     private static MessageSource messageSource;
@@ -27,7 +29,7 @@ public final class I18nAssert {
      * 断言对象不存在（国际化消息）
      */
     public static void notFound(Object object, String messageKey, Object... args) {
-        if(object==null){
+        if(object==null || (object instanceof Collection && ((Collection)object).isEmpty())){
             String message = getMessage(messageKey, args);
             throw new BizException(ResultCode.NOT_FOUND,message);
         }

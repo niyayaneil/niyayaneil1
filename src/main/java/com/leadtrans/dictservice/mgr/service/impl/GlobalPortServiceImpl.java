@@ -82,6 +82,19 @@ public class GlobalPortServiceImpl implements GlobalPortService {
         return GlobalPortRespVO;
     }
 
+    @Override
+    public GlobalPortRespVO getByCode(String code) {
+        if(!StringUtils.hasText(code)){
+            return null;
+        }
+
+        List<GlobalPortEntity> entities = globalPortMapper.selectList(new LambdaQueryWrapper<GlobalPortEntity>().eq(GlobalPortEntity::getCode,code));
+        I18nAssert.notFound(entities, "globalPortReqVO.code.NotFound",code);
+
+        List<GlobalPortRespVO> globalPortRespVOS = GlobalPortConvert.INSTANCE.toVOList(entities);
+        fillNames(globalPortRespVOS);
+        return globalPortRespVOS.get(0);
+    }
 
     @Override
     public PageResult<GlobalPortRespVO> page(GlobalPortPageReqVO reqVO) {

@@ -21,6 +21,8 @@ import java.io.Serializable;
 public class DictCountryReqVO extends BaseReqVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @ApiModelProperty(value = "记录ID")
+    private Long id;
 
     @ApiModelProperty(value = "国家编码")
     private String code;
