@@ -49,6 +49,9 @@ public class SupplierServiceImpl implements SupplierService {
         I18nAssert.badRequest(id, "supplierReqVO.id.NotNull");
         I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "supplierReqVO.isValid.Invalid");
 
+        Integer count = supplierMapper.selectCount(new LambdaQueryWrapper<SupplierEntity>().eq(SupplierEntity::getCode, VO.getCode()).ne(SupplierEntity::getId,id));
+        I18nAssert.exists(count, "supplierReqVO.code.Exists",VO.getCode());
+
         SupplierEntity entity = supplierMapper.selectById(id);
 
         I18nAssert.notFound(entity, "supplierReqVO.id.NotFound",id.toString());

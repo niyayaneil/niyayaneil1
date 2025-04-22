@@ -50,7 +50,7 @@ public class GlobalPortEntity implements Serializable {
      * 区域
      */
     @TableField("LGP_LGA")
-    private Long globalAreaPk;
+    private Long globalAreaId;
 
     @TableField("LGP_GroupName")
     private String groupName;

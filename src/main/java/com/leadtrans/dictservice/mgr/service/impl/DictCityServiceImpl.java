@@ -60,6 +60,9 @@ public class DictCityServiceImpl implements DictCityService {
         I18nAssert.badRequest(id, "dictCityReqVO.id.NotNull");
         I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "dictCityReqVO.isValid.Invalid");
 
+        Integer count = dictCityMapper.selectCount(new LambdaQueryWrapper<DictCityEntity>().eq(DictCityEntity::getNumCode, VO.getNumCode()).ne(DictCityEntity::getId,id));
+        I18nAssert.exists(count, "dictCityReqVO.numCode.Exists",VO.getNumCode());
+
         DictCityEntity entity = dictCityMapper.selectById(id);
 
         I18nAssert.notFound(entity, "dictCityReqVO.id.NotFound",id.toString());

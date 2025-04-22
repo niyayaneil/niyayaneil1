@@ -34,6 +34,9 @@ public class DictCountryServiceImpl implements DictCountryService {
         Integer count = dictCountryMapper.selectCount(new LambdaQueryWrapper<DictCountryEntity>().eq(DictCountryEntity::getCode, VO.getCode()));
         I18nAssert.exists(count, "dictCountryReqVO.code.Exists",VO.getCode());
 
+        Integer count1 = dictCountryMapper.selectCount(new LambdaQueryWrapper<DictCountryEntity>().eq(DictCountryEntity::getNumCode, VO.getNumCode()));
+        I18nAssert.exists(count1, "dictCountryReqVO.numCode.Exists",VO.getNumCode());
+
         DictCountryEntity entity = DictCountryConvert.INSTANCE.toEntity(VO);
         dictCountryMapper.insert(entity);
         return entity.getId();
@@ -51,6 +54,12 @@ public class DictCountryServiceImpl implements DictCountryService {
     public void update(Long id, DictCountryReqVO VO) {
         I18nAssert.badRequest(id, "dictCountryReqVO.id.NotNull");
         I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "dictCountryReqVO.isValid.Invalid");
+
+        Integer count = dictCountryMapper.selectCount(new LambdaQueryWrapper<DictCountryEntity>().eq(DictCountryEntity::getCode, VO.getCode()).ne(DictCountryEntity::getId,id));
+        I18nAssert.exists(count, "dictCountryReqVO.code.Exists",VO.getCode());
+
+        Integer count1 = dictCountryMapper.selectCount(new LambdaQueryWrapper<DictCountryEntity>().eq(DictCountryEntity::getNumCode, VO.getNumCode()).ne(DictCountryEntity::getId,id));
+        I18nAssert.exists(count1, "dictCountryReqVO.numCode.Exists",VO.getNumCode());
 
         DictCountryEntity entity = dictCountryMapper.selectById(id);
         I18nAssert.notFound(entity, "dictCountryReqVO.id.NotFound",id.toString());

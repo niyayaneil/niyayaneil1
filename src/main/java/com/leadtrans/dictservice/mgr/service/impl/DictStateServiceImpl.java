@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leadtrans.dictservice.common.enums.StatusEnum;
 import com.leadtrans.dictservice.common.i18n.I18nAssert;
+import com.leadtrans.dictservice.common.repository.entity.DictCityEntity;
 import com.leadtrans.dictservice.common.repository.entity.DictCountryEntity;
 import com.leadtrans.dictservice.common.repository.entity.DictStateEntity;
 import com.leadtrans.dictservice.common.repository.mapper.DictStateMapper;
@@ -55,6 +56,9 @@ public class DictStateServiceImpl implements DictStateService {
     public void update(Long id, DictStateReqVO VO) {
         I18nAssert.badRequest(id, "dictStateReqVO.id.NotNull");
         I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "dictStateReqVO.isValid.Invalid");
+
+        Integer count = dictStateMapper.selectCount(new LambdaQueryWrapper<DictStateEntity>().eq(DictStateEntity::getNumCode, VO.getNumCode()).ne(DictStateEntity::getId,id));
+        I18nAssert.exists(count, "dictStateReqVO.numCode.Exists",VO.getNumCode());
 
         DictStateEntity entity = dictStateMapper.selectById(id);
         I18nAssert.notFound(entity, "dictStateReqVO.id.NotFound",id.toString());

@@ -32,6 +32,7 @@ public class CarrierCompanyServiceImpl implements CarrierCompanyService {
     public Long create(CarrierCompanyReqVO VO) {
         Integer count = carrierCompanyMapper.selectCount(new LambdaQueryWrapper<CarrierCompanyEntity>().eq(CarrierCompanyEntity::getCode, VO.getCode()));
         I18nAssert.exists(count, "carrierCompanyReqVO.code.Exists",VO.getCode());
+
         CarrierCompanyEntity entity = CarrierCompanyConvert.INSTANCE.toEntity(VO);
         carrierCompanyMapper.insert(entity);
         return entity.getId();
@@ -48,6 +49,9 @@ public class CarrierCompanyServiceImpl implements CarrierCompanyService {
     public void update(Long id, CarrierCompanyReqVO VO) {
         I18nAssert.badRequest(id, "carrierCompanyReqVO.id.NotNull");
         I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "carrierCompanyReqVO.isValid.Invalid");
+
+        Integer count = carrierCompanyMapper.selectCount(new LambdaQueryWrapper<CarrierCompanyEntity>().eq(CarrierCompanyEntity::getCode, VO.getCode()).ne(CarrierCompanyEntity::getId,id));
+        I18nAssert.exists(count, "carrierCompanyReqVO.code.Exists",VO.getCode());
 
         CarrierCompanyEntity entity = carrierCompanyMapper.selectById(id);
         I18nAssert.notFound(entity, "carrierCompanyReqVO.id.NotFound",id.toString());
