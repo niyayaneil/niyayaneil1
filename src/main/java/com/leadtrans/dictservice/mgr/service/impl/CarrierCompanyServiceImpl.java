@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,8 +31,7 @@ public class CarrierCompanyServiceImpl implements CarrierCompanyService {
     @Override
     public Long create(CarrierCompanyReqVO VO) {
         Integer count = carrierCompanyMapper.selectCount(new LambdaQueryWrapper<CarrierCompanyEntity>().eq(CarrierCompanyEntity::getCode, VO.getCode()));
-        I18nAssert.exists(count, "entity.exists","CarrierCompany","code",VO.getCode());
-
+        I18nAssert.exists(count, "carrierCompanyReqVO.code.Exists",VO.getCode());
         CarrierCompanyEntity entity = CarrierCompanyConvert.INSTANCE.toEntity(VO);
         carrierCompanyMapper.insert(entity);
         return entity.getId();
@@ -38,18 +39,18 @@ public class CarrierCompanyServiceImpl implements CarrierCompanyService {
 
     @Override
     public void delete(Long id) {
-        I18nAssert.badRequest(id, "id.null");
-        I18nAssert.notFound(carrierCompanyMapper.selectById(id), "entity.null");
+        I18nAssert.badRequest(id, "carrierCompanyReqVO.id.NotNull");
+        I18nAssert.notFound(carrierCompanyMapper.selectById(id), "carrierCompanyReqVO.id.NotFound",id.toString());
         carrierCompanyMapper.deleteById(id);
     }
 
     @Override
     public void update(Long id, CarrierCompanyReqVO VO) {
-        I18nAssert.badRequest(id, "id.null");
+        I18nAssert.badRequest(id, "carrierCompanyReqVO.id.NotNull");
+        I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "carrierCompanyReqVO.isValid.Invalid");
 
         CarrierCompanyEntity entity = carrierCompanyMapper.selectById(id);
-
-        I18nAssert.notFound(entity, "entity.null");
+        I18nAssert.notFound(entity, "carrierCompanyReqVO.id.NotFound",id.toString());
 
         CarrierCompanyConvert.INSTANCE.updateEntity(VO,entity);
 
@@ -58,11 +59,11 @@ public class CarrierCompanyServiceImpl implements CarrierCompanyService {
 
     @Override
     public CarrierCompanyRespVO getById(Long id) {
-        I18nAssert.badRequest(id, "id.null");
+        I18nAssert.badRequest(id, "carrierCompanyReqVO.id.NotNull");
 
         CarrierCompanyEntity entity = carrierCompanyMapper.selectById(id);
 
-        I18nAssert.badRequest(entity, "entity.null");
+        I18nAssert.notFound(entity, "carrierCompanyReqVO.id.NotFound",id.toString());
 
         return CarrierCompanyConvert.INSTANCE.toVO(entity);
     }
@@ -70,10 +71,12 @@ public class CarrierCompanyServiceImpl implements CarrierCompanyService {
 
     @Override
     public PageResult<CarrierCompanyRespVO> page(CarrierCompanyPageReqVO reqVO) {
-        IPage page = new Page(reqVO.getPageNum(),reqVO.getPageSize());
 
+        I18nAssert.isTrue(Objects.isNull(reqVO.getIsValid()) || StatusEnum.getCodes().contains(reqVO.getIsValid()), "carrierCompanyReqVO.isValid.Invalid");
+
+        IPage page = new Page(reqVO.getPageNum(),reqVO.getPageSize());
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<CarrierCompanyEntity>()
-            .eq(CarrierCompanyEntity::getIsValid, StatusEnum.valid.getCode())
+            .eq(Objects.nonNull(reqVO.getIsValid()), CarrierCompanyEntity::getIsValid,reqVO.getIsValid())
             .eq(StringUtils.hasText(reqVO.getCode()),CarrierCompanyEntity::getCode,reqVO.getCode())
             .eq(StringUtils.hasText(reqVO.getName()),CarrierCompanyEntity::getName,reqVO.getName())
             .eq(StringUtils.hasText(reqVO.getCargowise9Code()),CarrierCompanyEntity::getCargowise9Code,reqVO.getCargowise9Code());
@@ -88,12 +91,11 @@ public class CarrierCompanyServiceImpl implements CarrierCompanyService {
 
     @Override
     public void updateValid(Long id, String isValid) {
-        I18nAssert.badRequest(id, "id.null");
-        I18nAssert.badRequest(isValid, "isValid.null");
-        I18nAssert.isTrue(StatusEnum.getCodes().contains(isValid), "isValid.error");
+        I18nAssert.badRequest(id, "carrierCompanyReqVO.id.NotNull");
+        I18nAssert.isTrue(StatusEnum.getCodes().contains(isValid), "carrierCompanyReqVO.isValid.Invalid");
 
         CarrierCompanyEntity entity = carrierCompanyMapper.selectById(id);
-        I18nAssert.notFound(entity, "entity.null");
+        I18nAssert.notFound(entity, "carrierCompanyReqVO.id.NotFound",id.toString());
 
         entity.setIsValid(isValid);
         carrierCompanyMapper.updateById(entity);

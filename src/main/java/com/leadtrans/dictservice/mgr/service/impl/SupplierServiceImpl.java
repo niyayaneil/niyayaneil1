@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -45,6 +47,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public void update(Long id, SupplierReqVO VO) {
         I18nAssert.badRequest(id, "supplierReqVO.id.NotNull");
+        I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "supplierReqVO.isValid.Invalid");
 
         SupplierEntity entity = supplierMapper.selectById(id);
 
@@ -69,10 +72,12 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public PageResult<SupplierRespVO> page(SupplierPageReqVO reqVO) {
+        I18nAssert.isTrue(Objects.isNull(reqVO.getIsValid()) || StatusEnum.getCodes().contains(reqVO.getIsValid()), "supplierReqVO.isValid.Invalid");
+
         IPage page = new Page(reqVO.getPageNum(),reqVO.getPageSize());
 
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<SupplierEntity>()
-            .eq(SupplierEntity::getIsValid, StatusEnum.valid.getCode());
+        .eq(Objects.nonNull(reqVO.getIsValid()), SupplierEntity::getIsValid,reqVO.getIsValid());
 
         //排序
         LambdaOrderByFactory.orderBy(wrapper, SupplierEntity.class,reqVO.getOrderBys());

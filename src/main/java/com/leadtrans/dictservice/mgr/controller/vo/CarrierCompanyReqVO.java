@@ -42,10 +42,11 @@ public class CarrierCompanyReqVO extends BaseReqVO implements Serializable {
 
     @ApiModelProperty(value = "Web Url")
     @NotBlank
-    @Size(max = 256, message = "Website URL must be at most 9 characters")
+    @Size(max = 256, message = "Website URL must be at most 256 characters")
     private String webUrl;
 
     @ApiModelProperty(value = "LOGO")
+    @Size(max = 256, message = "LOGO must be at most 256 characters")
     private String logoUrl;
 
     @ApiModelProperty(value = "Sort")

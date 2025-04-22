@@ -58,6 +58,7 @@ public class DictCityServiceImpl implements DictCityService {
     @Override
     public void update(Long id, DictCityReqVO VO) {
         I18nAssert.badRequest(id, "dictCityReqVO.id.NotNull");
+        I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "dictCityReqVO.isValid.Invalid");
 
         DictCityEntity entity = dictCityMapper.selectById(id);
 
@@ -84,10 +85,12 @@ public class DictCityServiceImpl implements DictCityService {
 
     @Override
     public PageResult<DictCityRespVO> page(DictCityPageReqVO reqVO) {
+        I18nAssert.isTrue(Objects.isNull(reqVO.getIsValid()) || StatusEnum.getCodes().contains(reqVO.getIsValid()), "dictCityReqVO.isValid.Invalid");
+
         IPage page = new Page(reqVO.getPageNum(),reqVO.getPageSize());
 
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<DictCityEntity>()
-            .eq(StatusEnum.getCodes().contains(reqVO.getIsValid()),DictCityEntity::getIsValid,reqVO.getIsValid())
+            .eq(Objects.nonNull(reqVO.getIsValid()),DictCityEntity::getIsValid,reqVO.getIsValid())
             .eq(StringUtils.hasText(reqVO.getCountryNumCode()),DictCityEntity::getCountryNumCode,reqVO.getCountryNumCode())
             .eq(StringUtils.hasText(reqVO.getStateNumCode()),DictCityEntity::getStateNumCode,reqVO.getStateNumCode());
 

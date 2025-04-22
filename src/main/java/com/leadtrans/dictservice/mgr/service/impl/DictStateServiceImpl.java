@@ -54,6 +54,7 @@ public class DictStateServiceImpl implements DictStateService {
     @Override
     public void update(Long id, DictStateReqVO VO) {
         I18nAssert.badRequest(id, "dictStateReqVO.id.NotNull");
+        I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "dictStateReqVO.isValid.Invalid");
 
         DictStateEntity entity = dictStateMapper.selectById(id);
         I18nAssert.notFound(entity, "dictStateReqVO.id.NotFound",id.toString());
@@ -77,10 +78,12 @@ public class DictStateServiceImpl implements DictStateService {
 
     @Override
     public PageResult<DictStateRespVO> page(DictStatePageReqVO reqVO) {
+        I18nAssert.isTrue(Objects.isNull(reqVO.getIsValid()) || StatusEnum.getCodes().contains(reqVO.getIsValid()), "dictStateReqVO.isValid.Invalid");
+
         IPage page = new Page(reqVO.getPageNum(),reqVO.getPageSize());
 
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<DictStateEntity>()
-            .eq(StatusEnum.getCodes().contains(reqVO.getIsValid()),DictStateEntity::getIsValid,reqVO.getIsValid())
+            .eq(Objects.nonNull(reqVO.getIsValid()),DictStateEntity::getIsValid,reqVO.getIsValid())
             .eq(StringUtils.hasText(reqVO.getCountryNumCode()),DictStateEntity::getCountryNumCode,reqVO.getCountryNumCode());
 
         //排序

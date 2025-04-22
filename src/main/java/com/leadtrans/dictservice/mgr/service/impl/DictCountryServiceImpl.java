@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -49,6 +50,7 @@ public class DictCountryServiceImpl implements DictCountryService {
     @Override
     public void update(Long id, DictCountryReqVO VO) {
         I18nAssert.badRequest(id, "dictCountryReqVO.id.NotNull");
+        I18nAssert.isTrue(StatusEnum.getCodes().contains(VO.getIsValid()), "dictCountryReqVO.isValid.Invalid");
 
         DictCountryEntity entity = dictCountryMapper.selectById(id);
         I18nAssert.notFound(entity, "dictCountryReqVO.id.NotFound",id.toString());
@@ -71,10 +73,12 @@ public class DictCountryServiceImpl implements DictCountryService {
 
     @Override
     public PageResult<DictCountryRespVO> page(DictCountryPageReqVO reqVO) {
+        I18nAssert.isTrue(Objects.isNull(reqVO.getIsValid()) || StatusEnum.getCodes().contains(reqVO.getIsValid()), "dictCountryReqVO.isValid.Invalid");
+
         IPage page = new Page(reqVO.getPageNum(),reqVO.getPageSize());
 
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<DictCountryEntity>()
-                .eq(StatusEnum.getCodes().contains(reqVO.getIsValid()),DictCountryEntity::getIsValid,reqVO.getIsValid());
+                .eq(Objects.nonNull(reqVO.getIsValid()),DictCountryEntity::getIsValid,reqVO.getIsValid());
 
         //排序
         LambdaOrderByFactory.orderBy(wrapper,DictCountryEntity.class,reqVO.getOrderBys());

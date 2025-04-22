@@ -2,9 +2,9 @@ package com.leadtrans.dictservice.mgr.controller;
 
 import com.leadtrans.dictservice.common.vo.PageResult;
 import com.leadtrans.dictservice.common.vo.ResultVO;
-import com.leadtrans.dictservice.mgr.controller.vo.CarrierCompanyRespVO;
 import com.leadtrans.dictservice.mgr.controller.vo.CarrierCompanyPageReqVO;
 import com.leadtrans.dictservice.mgr.controller.vo.CarrierCompanyReqVO;
+import com.leadtrans.dictservice.mgr.controller.vo.CarrierCompanyRespVO;
 import com.leadtrans.dictservice.mgr.service.CarrierCompanyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
