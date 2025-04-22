@@ -64,7 +64,7 @@ public class OptionServiceImpl implements OptionService {
             pageReqVO.setPageSize(1000000);
             pageReqVO.setOrderBys(List.of("nameEn:asc"));
             PageResult<DictCountryRespVO> page = dictCountryService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",e.getNameCn(),e.getNameEn(),e.getNumCode()))).collect(Collectors.toList());
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",e.getNameCn(),e.getNameEn(),e.getNumCode(),e.getCode()))).collect(Collectors.toList());
         });
         builders.put("states", parameters ->{
                 DictStatePageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictStatePageReqVO.class);
