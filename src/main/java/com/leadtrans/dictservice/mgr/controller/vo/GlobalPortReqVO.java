@@ -58,15 +58,15 @@ public class GlobalPortReqVO extends BaseReqVO implements Serializable {
     private String groupName;
 
     @ApiModelProperty(value = "港口显示名")
-    private String displayName;
+    private String portFullName;
 
-    public String getDisplayName() {
+    public String getPortFullName() {
         if(StringUtils.hasText(stateCode) && !NumberUtils.isNumber(stateCode) && stateCode.length()==2){
-            displayName = this.nameEn +","+stateCode;
+            portFullName = this.nameEn +","+stateCode;
         }else{
-            displayName = this.nameEn;
+            portFullName = this.nameEn;
         }
-        return displayName;
+        return portFullName;
     }
 
 }

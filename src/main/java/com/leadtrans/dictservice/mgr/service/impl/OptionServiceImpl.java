@@ -134,7 +134,7 @@ public class OptionServiceImpl implements OptionService {
             pageReqVO.setPageNum(1);
             pageReqVO.setPageSize(1000000);
             PageResult<GlobalPortRespVO> page = globalPortService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getCode(), e.getNameEn(), e.getDisplayName())).collect(Collectors.toList());
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getCode(), e.getNameEn(), e.getPortFullName())).collect(Collectors.toList());
         });
 
     }

@@ -133,12 +133,24 @@ public class GlobalPortServiceImpl implements GlobalPortService {
     }
 
     @Override
-    public List<GlobalPortEntity> selectByIds(List<Long> globalPortIds){
+    public List<GlobalPortEntity> selectByIds(Collection<Long> globalPortIds){
         if(CollectionUtils.isEmpty(globalPortIds)){
             return List.of();
         }
         List<GlobalPortEntity> globalPortEntities = globalPortMapper.selectBatchIds(globalPortIds);
         return globalPortEntities;
+    }
+
+    @Override
+    public Map<String,GlobalPortRespVO> selectMapByCodes(Collection<String> globalPortCodes){
+        if(CollectionUtils.isEmpty(globalPortCodes)){
+            return Map.of();
+        }
+        List<GlobalPortEntity> globalPortEntities = globalPortMapper.selectList(new LambdaQueryWrapper<GlobalPortEntity>().in(GlobalPortEntity::getCode,globalPortCodes));
+        if(CollectionUtils.isEmpty(globalPortEntities)){
+            return Map.of();
+        }
+        return globalPortEntities.stream().collect(Collectors.toMap(v->v.getCode(),v->GlobalPortConvert.INSTANCE.toVO(v),(v1,v2)->v1));
     }
 
 

@@ -6,7 +6,9 @@ import com.leadtrans.dictservice.mgr.controller.vo.GlobalPortPageReqVO;
 import com.leadtrans.dictservice.mgr.controller.vo.GlobalPortReqVO;
 import com.leadtrans.dictservice.mgr.controller.vo.GlobalPortRespVO;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface GlobalPortService {
 
@@ -24,5 +26,7 @@ public interface GlobalPortService {
 
     void updateValid(Long id, String isValid);
 
-    List<GlobalPortEntity> selectByIds(List<Long> globalPortIds);
+    List<GlobalPortEntity> selectByIds(Collection<Long> globalPortIds);
+
+    Map<String,GlobalPortRespVO> selectMapByCodes(Collection<String> globalPortCodes);
 }
