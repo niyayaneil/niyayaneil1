@@ -29,6 +29,10 @@ public class OptionServiceImpl implements OptionService {
     private GlobalPortAttriService globalPortAttriService;
     @Autowired
     private CarrierCompanyService carrierCompanyService;
+    @Autowired
+    private DictSourceService dictSourceService;
+    @Autowired
+    private GlobalPortService globalPortService;
 
     @Override
     public Map<String, List<OptionRespVO>> getOptions(Map<String, Map<String,String>> reqVO) {
@@ -45,7 +49,13 @@ public class OptionServiceImpl implements OptionService {
                 ));
     }
 
-    private interface OptionBuilder {
+
+    @Override
+    public Collection<String> getRegisters() {
+        return builders.keySet();
+    }
+
+    public interface OptionBuilder {
         List<OptionRespVO> build(Map<String,String> parameters);
     }
     private final Map<String,OptionBuilder> builders = new HashMap<>();
@@ -107,7 +117,23 @@ public class OptionServiceImpl implements OptionService {
             pageReqVO.setPageNum(1);
             pageReqVO.setPageSize(1000000);
             PageResult<CarrierCompanyRespVO> page = carrierCompanyService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getId(), e.getName(), e.getName())).collect(Collectors.toList());
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getCode(), e.getName(), e.getName())).collect(Collectors.toList());
+        });
+
+        builders.put("sources", parameters -> {
+            DictSourcePageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictSourcePageReqVO.class);
+            pageReqVO.setPageNum(1);
+            pageReqVO.setPageSize(1000000);
+            PageResult<DictSourceRespVO> page = dictSourceService.page(pageReqVO);
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getCode(), e.getName(), e.getName())).collect(Collectors.toList());
+        });
+
+        builders.put("globalPorts", parameters -> {
+            GlobalPortPageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters),GlobalPortPageReqVO.class);
+            pageReqVO.setPageNum(1);
+            pageReqVO.setPageSize(1000000);
+            PageResult<GlobalPortRespVO> page = globalPortService.page(pageReqVO);
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getCode(), e.getNameEn(), e.getDisplayName())).collect(Collectors.toList());
         });
 
     }
