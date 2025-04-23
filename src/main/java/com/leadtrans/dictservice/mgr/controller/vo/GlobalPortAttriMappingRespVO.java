@@ -19,7 +19,7 @@ import java.util.Date;
 @Setter
 @Getter
 @ApiModel(value = "港口属性详情对象", description = "用于详细和列表查看港口属性")
-public class GlobalPortAttriMappingRespVO extends GlobalPortAttriReqVO implements Serializable {
+public class GlobalPortAttriMappingRespVO extends GlobalPortAttriMappingReqVO implements Serializable {
 
     @ApiModelProperty(value = "记录ID")
     private Long id;
@@ -41,6 +41,9 @@ public class GlobalPortAttriMappingRespVO extends GlobalPortAttriReqVO implement
 
 
 
+    @ApiModelProperty(value = "港口ID")
+    private Long globalPortId;
+
     @ApiModelProperty(value = "港口五字码")
     private String globalPortCode;
 
@@ -49,6 +52,10 @@ public class GlobalPortAttriMappingRespVO extends GlobalPortAttriReqVO implement
 
     @ApiModelProperty(value = "港口英文名")
     private String globalPortNameEn;
+
+
+    @ApiModelProperty(value = "属性ID")
+    private Long globalPortAttriId;
 
     @ApiModelProperty(value = "属性类型")
     private String globalPortAttriType;

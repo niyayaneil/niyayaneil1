@@ -17,6 +17,7 @@ import com.leadtrans.dictservice.mgr.service.GlobalPortAttriService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -103,5 +104,13 @@ public class GlobalPortAttriServiceImpl implements GlobalPortAttriService {
         globalPortAttriMapper.updateById(entity);
     }
 
+    @Override
+    public List<GlobalPortAttriEntity> selectByIds(List<Long> globalPortAttriIds){
+        if(CollectionUtils.isEmpty(globalPortAttriIds)){
+            return List.of();
+        }
+        List<GlobalPortAttriEntity> globalPortAttriEntities = globalPortAttriMapper.selectBatchIds(globalPortAttriIds);
 
+        return globalPortAttriEntities;
+    }
 }

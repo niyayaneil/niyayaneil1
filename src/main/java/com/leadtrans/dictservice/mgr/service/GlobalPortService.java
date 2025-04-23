@@ -1,9 +1,12 @@
 package com.leadtrans.dictservice.mgr.service;
 
+import com.leadtrans.dictservice.common.repository.entity.GlobalPortEntity;
 import com.leadtrans.dictservice.common.vo.PageResult;
 import com.leadtrans.dictservice.mgr.controller.vo.GlobalPortPageReqVO;
 import com.leadtrans.dictservice.mgr.controller.vo.GlobalPortReqVO;
 import com.leadtrans.dictservice.mgr.controller.vo.GlobalPortRespVO;
+
+import java.util.List;
 
 public interface GlobalPortService {
 
@@ -20,4 +23,6 @@ public interface GlobalPortService {
     PageResult<GlobalPortRespVO> page(GlobalPortPageReqVO reqVO);
 
     void updateValid(Long id, String isValid);
+
+    List<GlobalPortEntity> selectByIds(List<Long> globalPortIds);
 }

@@ -132,6 +132,16 @@ public class GlobalPortServiceImpl implements GlobalPortService {
         globalPortMapper.updateById(entity);
     }
 
+    @Override
+    public List<GlobalPortEntity> selectByIds(List<Long> globalPortIds){
+        if(CollectionUtils.isEmpty(globalPortIds)){
+            return List.of();
+        }
+        List<GlobalPortEntity> globalPortEntities = globalPortMapper.selectBatchIds(globalPortIds);
+        return globalPortEntities;
+    }
+
+
     private void fillNames(Collection<GlobalPortRespVO> globalPortRespVOS){
         if(CollectionUtils.isEmpty(globalPortRespVOS)){
             return;

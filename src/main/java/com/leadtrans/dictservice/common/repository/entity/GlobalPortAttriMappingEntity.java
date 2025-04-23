@@ -31,14 +31,26 @@ public class GlobalPortAttriMappingEntity implements Serializable {
     /**
      * 港口主键
      */
-    @TableField("LGPAM_PK")
+    @TableField("LGP_PK")
     private Long globalPortId;
+    /**
+     * 港口五字码
+     */
+    @TableField("LGP_Code")
+    private String globalPortCode;
 
     /**
      * 属性主键
      */
     @TableField("LGPA_PK")
     private Long globalPortAttriId;
+
+    /**
+     * 属性编码
+     */
+    @TableField("LGPA_Code")
+    private String globalPortAttriCode;
+
 
     @TableField(value = "LGPAM_SystemCreateTimeUtc",fill = FieldFill.INSERT)
     private Date systemCreateTimeUtc;

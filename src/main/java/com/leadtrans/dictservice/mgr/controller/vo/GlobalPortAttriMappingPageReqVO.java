@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -24,17 +23,7 @@ public class GlobalPortAttriMappingPageReqVO extends PageReqVO implements Serial
     @ApiModelProperty(value = "是否有效")
     private String isValid;
 
-    private static final long serialVersionUID = 1L;
     @ApiModelProperty(value = "港口五字码")
-    @NotNull
     private String globalPortCode;
-
-    @ApiModelProperty(value = "属性值类型")
-    @NotNull
-    private String portAttriType;
-
-    @ApiModelProperty(value = "属性值ID")
-    @NotNull
-    private Long portAttriId;
 
 }

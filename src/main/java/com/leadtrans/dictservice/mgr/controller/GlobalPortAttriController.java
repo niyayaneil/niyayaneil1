@@ -26,7 +26,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/mgr/globalPortAttriAttris")
-@Api(tags = "港口属性值管理接口")
+@Api(tags = "属性值管理接口")
 public class GlobalPortAttriController {
 
     @Autowired

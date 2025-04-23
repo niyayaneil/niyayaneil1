@@ -7,6 +7,7 @@ import com.leadtrans.dictservice.common.enums.StatusEnum;
 import com.leadtrans.dictservice.common.i18n.I18nAssert;
 import com.leadtrans.dictservice.common.repository.entity.GlobalPortAttriEntity;
 import com.leadtrans.dictservice.common.repository.entity.GlobalPortAttriMappingEntity;
+import com.leadtrans.dictservice.common.repository.entity.GlobalPortEntity;
 import com.leadtrans.dictservice.common.repository.mapper.GlobalPortAttriMappingMapper;
 import com.leadtrans.dictservice.common.utils.LambdaOrderByFactory;
 import com.leadtrans.dictservice.common.vo.PageResult;
@@ -16,14 +17,18 @@ import com.leadtrans.dictservice.mgr.controller.vo.GlobalPortAttriMappingRespVO;
 import com.leadtrans.dictservice.mgr.controller.vo.GlobalPortRespVO;
 import com.leadtrans.dictservice.mgr.convert.GlobalPortAttriMappingConvert;
 import com.leadtrans.dictservice.mgr.service.GlobalPortAttriMappingService;
+import com.leadtrans.dictservice.mgr.service.GlobalPortAttriService;
 import com.leadtrans.dictservice.mgr.service.GlobalPortService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,6 +36,7 @@ import java.util.Objects;
 public class GlobalPortAttriMappingServiceImpl implements GlobalPortAttriMappingService {
     private final GlobalPortAttriMappingMapper globalPortAttriMappingMapper;
     private final GlobalPortService globalPortService;
+    private final GlobalPortAttriService globalPortAttriService;
 
     @Override
     public Long create(GlobalPortAttriMappingReqVO VO) {
@@ -82,6 +88,7 @@ public class GlobalPortAttriMappingServiceImpl implements GlobalPortAttriMapping
         GlobalPortAttriMappingEntity entity = globalPortAttriMappingMapper.selectById(id);
         I18nAssert.notFound(entity, "globalPortAttriMappingReqVO.id.NotFound",id.toString());
         GlobalPortAttriMappingRespVO globalPortAttriRespVO = GlobalPortAttriMappingConvert.INSTANCE.toVO(entity);
+        fillNames(List.of(globalPortAttriRespVO));
         return globalPortAttriRespVO;
     }
 
@@ -89,23 +96,19 @@ public class GlobalPortAttriMappingServiceImpl implements GlobalPortAttriMapping
     @Override
     public PageResult<GlobalPortAttriMappingRespVO> page(GlobalPortAttriMappingPageReqVO reqVO) {
         I18nAssert.isTrue(Objects.isNull(reqVO.getIsValid()) || StatusEnum.getCodes().contains(reqVO.getIsValid()), "globalPortAttriMappingReqVO.isValid.Invalid");
-        GlobalPortRespVO globalPortRespVO = globalPortService.getByCode(reqVO.getGlobalPortCode());
 
         IPage page = new Page(reqVO.getPageNum(),reqVO.getPageSize());
 
         LambdaQueryWrapper<GlobalPortAttriMappingEntity> wrapper = new LambdaQueryWrapper<GlobalPortAttriMappingEntity>()
             .eq(Objects.nonNull(reqVO.getIsValid()),GlobalPortAttriMappingEntity::getIsValid,reqVO.getIsValid())
-            .eq(Objects.nonNull(reqVO.getPortAttriId()),GlobalPortAttriMappingEntity::getGlobalPortAttriId,reqVO.getPortAttriId());
-
-        if(Objects.nonNull(globalPortRespVO)){
-            wrapper.eq(Objects.nonNull(globalPortRespVO),GlobalPortAttriMappingEntity::getGlobalPortId,globalPortRespVO.getId());
-        }
+            .eq(StringUtils.hasText(reqVO.getGlobalPortCode()),GlobalPortAttriMappingEntity::getGlobalPortCode,reqVO.getGlobalPortCode());
 
         //排序
         LambdaOrderByFactory.orderBy(wrapper, GlobalPortAttriMappingEntity.class,reqVO.getOrderBys());
 
         globalPortAttriMappingMapper.selectPage(page,wrapper);
         List list = GlobalPortAttriMappingConvert.INSTANCE.toVOList(page.getRecords());
+        fillNames(list);
         PageResult<GlobalPortAttriMappingRespVO> pageResult = new PageResult(page,list);
         return pageResult;
     }
@@ -122,5 +125,30 @@ public class GlobalPortAttriMappingServiceImpl implements GlobalPortAttriMapping
         globalPortAttriMappingMapper.updateById(entity);
     }
 
+    private void fillNames(List<GlobalPortAttriMappingRespVO> globalPortAttriMappingRespVOS){
+        if(CollectionUtils.isEmpty(globalPortAttriMappingRespVOS)){
+            return;
+        }
+        List<Long> globalPortIds = globalPortAttriMappingRespVOS.stream().map(v -> v.getGlobalPortId()).distinct().collect(Collectors.toList());
+        List<Long> globalPortAttriIds = globalPortAttriMappingRespVOS.stream().map(v -> v.getGlobalPortAttriId()).distinct().collect(Collectors.toList());
+
+        Map<Long,GlobalPortEntity> globalPortEntitiesMap = globalPortService.selectByIds(globalPortIds).stream().collect(Collectors.toMap(v->v.getId(),v->v));
+        Map<Long,GlobalPortAttriEntity> globalPortAttriEntities = globalPortAttriService.selectByIds(globalPortAttriIds).stream().collect(Collectors.toMap(v->v.getId(),v->v));
+
+        for (GlobalPortAttriMappingRespVO VO : globalPortAttriMappingRespVOS) {
+            GlobalPortEntity globalPortEntity = globalPortEntitiesMap.get(VO.getGlobalPortId());
+            if(Objects.nonNull(globalPortEntity)){
+                VO.setGlobalPortCode(globalPortEntity.getCode());
+                VO.setGlobalPortNameEn(globalPortEntity.getNameEn());
+                VO.setGlobalPortNameCn(globalPortEntity.getNameCn());
+            }
+            GlobalPortAttriEntity globalPortAttriEntity = globalPortAttriEntities.get(VO.getGlobalPortAttriId());
+            if(Objects.nonNull(globalPortAttriEntity)){
+                VO.setGlobalPortAttriCode(globalPortAttriEntity.getCode());
+                VO.setGlobalPortAttriName(globalPortAttriEntity.getName());
+                VO.setGlobalPortAttriType(globalPortAttriEntity.getType());
+            }
+        }
+    }
 
 }

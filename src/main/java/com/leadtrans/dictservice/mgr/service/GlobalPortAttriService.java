@@ -23,4 +23,5 @@ public interface GlobalPortAttriService {
 
     void updateValid(Long id, String isValid);
 
+    List<GlobalPortAttriEntity> selectByIds(List<Long> globalPortAttriIds);
 }
