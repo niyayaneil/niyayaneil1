@@ -26,6 +26,8 @@ public class OptionServiceImpl implements OptionService {
     private GlobalAreaService globalAreaService;
     @Autowired
     private GlobalPortAttriService globalPortAttriService;
+    @Autowired
+    private CarrierCompanyService carrierCompanyService;
 
     @Override
     public Map<String, List<OptionRespVO>> getOptions(Map<String, Map<String,String>> reqVO) {
@@ -98,6 +100,15 @@ public class OptionServiceImpl implements OptionService {
             PageResult<GlobalPortAttriRespVO> page = globalPortAttriService.page(pageReqVO);
             return page.getList().stream().map(e -> new OptionRespVO<>(e.getId(), e.getName(), e.getName())).collect(Collectors.toList());
         });
+
+        builders.put("carriers", parameters -> {
+            CarrierCompanyPageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), CarrierCompanyPageReqVO.class);
+            pageReqVO.setPageNum(1);
+            pageReqVO.setPageSize(1000000);
+            PageResult<CarrierCompanyRespVO> page = carrierCompanyService.page(pageReqVO);
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getId(), e.getName(), e.getName())).collect(Collectors.toList());
+        });
+
     }
 
 }
