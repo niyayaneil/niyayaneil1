@@ -9,6 +9,7 @@ import com.leadtrans.dictservice.mgr.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -66,7 +67,7 @@ public class OptionServiceImpl implements OptionService {
             pageReqVO.setPageSize(1000000);
             pageReqVO.setOrderBys(List.of("nameEn:asc"));
             PageResult<DictCountryRespVO> page = dictCountryService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",e.getNameCn(),e.getNameEn(),e.getNumCode(),e.getCode()))).collect(Collectors.toList());
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",StringUtils.hasText(e.getNameCn())?e.getNameCn():"",e.getNameEn(),e.getNumCode(),e.getCode()).trim())).collect(Collectors.toList());
         });
         builders.put("states", parameters ->{
                 DictStatePageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictStatePageReqVO.class);
@@ -74,7 +75,7 @@ public class OptionServiceImpl implements OptionService {
                 pageReqVO.setPageSize(1000000);
                 pageReqVO.setOrderBys(List.of("nameEn:asc"));
                 PageResult<DictStateRespVO> page = dictStateService.page(pageReqVO);
-                return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",e.getNameCn(),e.getNameEn(),e.getNumCode()))).collect(Collectors.toList());
+                return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ", StringUtils.hasText(e.getNameCn())?e.getNameCn():"",e.getNameEn(),e.getNumCode()).trim())).collect(Collectors.toList());
          });
         builders.put("cities", parameters -> {
             DictCityPageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictCityPageReqVO.class);
@@ -82,7 +83,7 @@ public class OptionServiceImpl implements OptionService {
             pageReqVO.setPageSize(1000000);
             pageReqVO.setOrderBys(List.of("nameEn:asc"));
             PageResult<DictCityRespVO> page = dictCityService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",e.getNameCn(),e.getNameEn(),e.getNumCode()))).collect(Collectors.toList());
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",StringUtils.hasText(e.getNameCn())?e.getNameCn():"",e.getNameEn(),e.getNumCode()).trim())).collect(Collectors.toList());
         });
 
         builders.put("globalAreas", parameters -> {
