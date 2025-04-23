@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.text.Collator;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -75,25 +76,25 @@ public class OptionServiceImpl implements OptionService {
             DictCountryPageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictCountryPageReqVO.class);
             pageReqVO.setPageNum(1);
             pageReqVO.setPageSize(1000000);
-            pageReqVO.setOrderBys(List.of("nameEn:asc"));
             PageResult<DictCountryRespVO> page = dictCountryService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",StringUtils.hasText(e.getNameCn())?e.getNameCn():"",e.getNameEn(),e.getNumCode(),e.getCode()).trim())).collect(Collectors.toList());
+            Collator collator = Collator.getInstance(Locale.CHINA);
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ", StringUtils.hasText(e.getNameCn()) ? e.getNameCn() : "", e.getNameEn(), e.getNumCode(), e.getCode()).trim())).sorted((v1,v2)->collator.compare(v1.getLabel(),v2.getLabel())).collect(Collectors.toList());
         });
         builders.put("states", parameters ->{
                 DictStatePageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictStatePageReqVO.class);
                 pageReqVO.setPageNum(1);
                 pageReqVO.setPageSize(1000000);
-                pageReqVO.setOrderBys(List.of("nameEn:asc"));
                 PageResult<DictStateRespVO> page = dictStateService.page(pageReqVO);
-                return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ", StringUtils.hasText(e.getNameCn())?e.getNameCn():"",e.getNameEn(),e.getNumCode()).trim())).collect(Collectors.toList());
+            Collator collator = Collator.getInstance(Locale.CHINA);
+                return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ", StringUtils.hasText(e.getNameCn())?e.getNameCn():"",e.getNameEn(),e.getNumCode()).trim())).sorted((v1,v2)->collator.compare(v1.getLabel(),v2.getLabel())).collect(Collectors.toList());
          });
         builders.put("cities", parameters -> {
             DictCityPageReqVO pageReqVO = JSON.parseObject(JSON.toJSONString(parameters), DictCityPageReqVO.class);
             pageReqVO.setPageNum(1);
             pageReqVO.setPageSize(1000000);
-            pageReqVO.setOrderBys(List.of("nameEn:asc"));
             PageResult<DictCityRespVO> page = dictCityService.page(pageReqVO);
-            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",StringUtils.hasText(e.getNameCn())?e.getNameCn():"",e.getNameEn(),e.getNumCode()).trim())).collect(Collectors.toList());
+            Collator collator = Collator.getInstance(Locale.CHINA);
+            return page.getList().stream().map(e -> new OptionRespVO<>(e.getNumCode(), e.getNameEn(), String.join(" ",StringUtils.hasText(e.getNameCn())?e.getNameCn():"",e.getNameEn(),e.getNumCode()).trim())).sorted((v1,v2)->collator.compare(v1.getLabel(),v2.getLabel())).collect(Collectors.toList());
         });
 
         builders.put("globalAreas", parameters -> {
