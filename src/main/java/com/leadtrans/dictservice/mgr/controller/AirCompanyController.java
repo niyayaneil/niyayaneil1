@@ -10,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import nonapi.io.github.classgraph.json.JSONUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +60,7 @@ public class AirCompanyController {
     @PostMapping("/page")
     @ApiOperation(value = "分页查询航空公司", notes = "支持条件筛选")
     public ResultVO<PageResult<AirCompanyRespVO>> page(@RequestBody AirCompanyPageReqVO reqVO) {
+        System.out.println(reqVO.toString());
         PageResult<AirCompanyRespVO> page = airCompanyService.page(reqVO);
         return ResultVO.success(page);
     }

@@ -4,6 +4,7 @@ import com.leadtrans.dictservice.common.vo.PageReqVO;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ import java.io.Serializable;
  */
 @Setter
 @Getter
+@ToString
 @ApiModel(value = "航空公司查询参数", description = "航空公司查询参数")
 public class AirCompanyPageReqVO extends PageReqVO implements Serializable {
 

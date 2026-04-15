@@ -1,5 +1,6 @@
 package com.leadtrans.dictservice.mgr.service.impl;
 
+import com.alibaba.fastjson.JSONAware;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,6 +17,8 @@ import com.leadtrans.dictservice.mgr.convert.AirCompanyConvert;
 import com.leadtrans.dictservice.mgr.service.AirCompanyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nonapi.io.github.classgraph.json.JSONUtils;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -75,8 +78,8 @@ public class AirCompanyServiceImpl implements AirCompanyService {
 
     @Override
     public PageResult<AirCompanyRespVO> page(AirCompanyPageReqVO reqVO) {
-
-        I18nAssert.isTrue(Objects.isNull(reqVO.getIsValid()) || (reqVO.getIsValid() == 0 || reqVO.getIsValid() == 1), "airCompanyReqVO.isValid.Invalid");
+        I18nAssert.isTrue(Objects.isNull(reqVO.getIsValid()) || 
+        (reqVO.getIsValid() == 0 || reqVO.getIsValid() == 1), "airCompanyReqVO.isValid.Invalid");
 
         IPage page = new Page(reqVO.getPageNum(), reqVO.getPageSize());
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<AirCompanyEntity>()
