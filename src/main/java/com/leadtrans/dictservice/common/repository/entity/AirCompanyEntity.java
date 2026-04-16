@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("aircompany")
+@TableName("airCompany")
 public class AirCompanyEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
