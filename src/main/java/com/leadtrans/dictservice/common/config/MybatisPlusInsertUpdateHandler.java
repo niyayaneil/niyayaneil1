@@ -24,27 +24,50 @@ public class MybatisPlusInsertUpdateHandler implements MetaObjectHandler {
         if (isValid == null) {
             setFieldValByName("isValid", StatusEnum.valid.getCode() , metaObject);
         }
-        //创建人
+        
+        String username = LoginUtils.getUsername();
+        Date now = new Date();
+        
+        //老表字段 - 创建人
         Object createBy = getFieldValByName("systemCreateUser", metaObject);
         if (createBy == null) {
-            setFieldValByName("systemCreateUser", LoginUtils.getUsername(), metaObject);
+            setFieldValByName("systemCreateUser", username, metaObject);
         }
-        //修改人
+        //老表字段 - 修改人
         Object updateBy = getFieldValByName("systemUpdateUser", metaObject);
         if (updateBy == null) {
-            setFieldValByName("systemUpdateUser", LoginUtils.getUsername(), metaObject);
+            setFieldValByName("systemUpdateUser", username, metaObject);
         }
-
-        Date now = new Date();
-        //创建时间
+        //老表字段 - 创建时间
         Object createTime = getFieldValByName("systemCreateTimeUtc", metaObject);
         if (createTime == null) {
             setFieldValByName("systemCreateTimeUtc", now, metaObject);
         }
-        //修改时间
+        //老表字段 - 修改时间
         Object updateTime = getFieldValByName("systemUpdateTimeUtc", metaObject);
         if (updateTime == null) {
             setFieldValByName("systemUpdateTimeUtc", now, metaObject);
+        }
+        
+        //新表字段 - 创建人
+        Object createUser = getFieldValByName("createUser", metaObject);
+        if (createUser == null) {
+            setFieldValByName("createUser", username, metaObject);
+        }
+        //新表字段 - 修改人
+        Object updateUser = getFieldValByName("updateUser", metaObject);
+        if (updateUser == null) {
+            setFieldValByName("updateUser", username, metaObject);
+        }
+        //新表字段 - 创建时间
+        Object newCreateTime = getFieldValByName("createTime", metaObject);
+        if (newCreateTime == null) {
+            setFieldValByName("createTime", now, metaObject);
+        }
+        //新表字段 - 修改时间
+        Object newUpdateTime = getFieldValByName("updateTime", metaObject);
+        if (newUpdateTime == null) {
+            setFieldValByName("updateTime", now, metaObject);
         }
     }
 
@@ -58,8 +81,17 @@ public class MybatisPlusInsertUpdateHandler implements MetaObjectHandler {
             version = String.valueOf(Integer.parseInt(version.toString())+1);
         }
         setFieldValByName("version", version , metaObject);
-        setFieldValByName("systemUpdateUser", LoginUtils.getUsername(), metaObject);
-        setFieldValByName("systemUpdateTimeUtc", new Date(), metaObject);
+        
+        String username = LoginUtils.getUsername();
+        Date now = new Date();
+        
+        //老表字段
+        setFieldValByName("systemUpdateUser", username, metaObject);
+        setFieldValByName("systemUpdateTimeUtc", now, metaObject);
+        
+        //新表字段
+        setFieldValByName("updateUser", username, metaObject);
+        setFieldValByName("updateTime", now, metaObject);
     }
 
 }
