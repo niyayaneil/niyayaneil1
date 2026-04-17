@@ -44,7 +44,6 @@ public class WarehouseReqVO implements Serializable {
     private String warehouseType;
 
     @ApiModelProperty(value = "服务支持：LCL/FCL/LCL,AIR等")
-    @NotBlank(message = "{WarehouseReqVO.serviceType.not_blank}")
     private String serviceType;
 
     @ApiModelProperty(value = "港口代码")

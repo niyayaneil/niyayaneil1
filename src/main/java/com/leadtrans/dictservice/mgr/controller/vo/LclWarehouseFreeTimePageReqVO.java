@@ -1,0 +1,41 @@
+package com.leadtrans.dictservice.mgr.controller.vo;
+
+import com.leadtrans.dictservice.common.vo.PageReqVO;
+import io.swagger.annotations.ApiModel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * <p>
+ * LCL拼箱目的港免堆期配置表
+ * </p>
+ *
+ * @author Aaron
+ * @since 2026-04-17
+ */
+@Setter
+@Getter
+@ToString
+@ApiModel(value = "免堆期配置查询参数", description = "免堆期配置查询参数")
+public class LclWarehouseFreeTimePageReqVO extends PageReqVO implements Serializable {
+
+    private String warehouseCode;
+
+    private String portCode;
+
+    private String serviceProvider;
+
+    private Integer freeDays;
+
+    private String freeUnit;
+
+    private Date validFrom;
+
+    private Date validTo;
+
+    private Integer isValid;
+}
