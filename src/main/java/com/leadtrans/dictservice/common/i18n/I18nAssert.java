@@ -39,9 +39,10 @@ public final class I18nAssert {
      * 断言参数错误（国际化消息）
      */
     public static void badRequest(Object object, String messageKey, Object... args) {
+        // 原逻辑：当对象为 null 时抛出异常
         if(object==null){
             String message = getMessage(messageKey, args);
-            throw new BizException(ResultCode.BAD_REQUEST,message);
+            throw new BizException(ResultCode.BAD_REQUEST, message);
         }
     }
 

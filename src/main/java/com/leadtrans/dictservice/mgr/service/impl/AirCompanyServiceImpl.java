@@ -84,11 +84,11 @@ public class AirCompanyServiceImpl implements AirCompanyService {
         IPage page = new Page(reqVO.getPageNum(), reqVO.getPageSize());
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<AirCompanyEntity>()
             .eq(Objects.nonNull(reqVO.getIsValid()), AirCompanyEntity::getIsValid, reqVO.getIsValid())
-            .eq(StringUtils.hasText(reqVO.getIataCode()), AirCompanyEntity::getIataCode, reqVO.getIataCode())
-            .eq(StringUtils.hasText(reqVO.getAirlineNameEn()), AirCompanyEntity::getAirlineNameEn, reqVO.getAirlineNameEn())
-            .eq(StringUtils.hasText(reqVO.getAirlineNameCn()), AirCompanyEntity::getAirlineNameCn, reqVO.getAirlineNameCn())
-            .eq(StringUtils.hasText(reqVO.getCargowiseCode()), AirCompanyEntity::getCargowiseCode, reqVO.getCargowiseCode())
-            .eq(StringUtils.hasText(reqVO.getUnlocode()), AirCompanyEntity::getUnlocode, reqVO.getUnlocode());
+            .like(StringUtils.hasText(reqVO.getIataCode()), AirCompanyEntity::getIataCode, reqVO.getIataCode())
+            .like(StringUtils.hasText(reqVO.getAirlineNameEn()), AirCompanyEntity::getAirlineNameEn, reqVO.getAirlineNameEn())
+            .like(StringUtils.hasText(reqVO.getAirlineNameCn()), AirCompanyEntity::getAirlineNameCn, reqVO.getAirlineNameCn())
+            .like(StringUtils.hasText(reqVO.getCargowiseCode()), AirCompanyEntity::getCargowiseCode, reqVO.getCargowiseCode())
+            .like(StringUtils.hasText(reqVO.getUnlocode()), AirCompanyEntity::getUnlocode, reqVO.getUnlocode());
 
         //排序
         LambdaOrderByFactory.orderBy(wrapper, AirCompanyEntity.class, reqVO.getOrderBys());

@@ -80,10 +80,10 @@ public class TruckCompanyServiceImpl implements TruckCompanyService {
         IPage page = new Page(reqVO.getPageNum(), reqVO.getPageSize());
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<TruckCompanyEntity>()
             .eq(Objects.nonNull(reqVO.getIsValid()), TruckCompanyEntity::getIsValid, reqVO.getIsValid())
-            .eq(StringUtils.hasText(reqVO.getTruckCode()), TruckCompanyEntity::getTruckCode, reqVO.getTruckCode())
-            .eq(StringUtils.hasText(reqVO.getTruckNameEn()), TruckCompanyEntity::getTruckNameEn, reqVO.getTruckNameEn())
-            .eq(StringUtils.hasText(reqVO.getTruckNameCn()), TruckCompanyEntity::getTruckNameCn, reqVO.getTruckNameCn())
-            .eq(StringUtils.hasText(reqVO.getUnlocode()), TruckCompanyEntity::getUnlocode, reqVO.getUnlocode());
+            .like(StringUtils.hasText(reqVO.getTruckCode()), TruckCompanyEntity::getTruckCode, reqVO.getTruckCode())
+            .like(StringUtils.hasText(reqVO.getTruckNameEn()), TruckCompanyEntity::getTruckNameEn, reqVO.getTruckNameEn())
+            .like(StringUtils.hasText(reqVO.getTruckNameCn()), TruckCompanyEntity::getTruckNameCn, reqVO.getTruckNameCn())
+            .like(StringUtils.hasText(reqVO.getUnlocode()), TruckCompanyEntity::getUnlocode, reqVO.getUnlocode());
 
         //排序
         LambdaOrderByFactory.orderBy(wrapper, TruckCompanyEntity.class, reqVO.getOrderBys());

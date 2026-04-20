@@ -80,14 +80,14 @@ public class WarehouseServiceImpl implements WarehouseService {
         IPage page = new Page(reqVO.getPageNum(), reqVO.getPageSize());
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<WarehouseEntity>()
             .eq(Objects.nonNull(reqVO.getIsValid()), WarehouseEntity::getIsValid, reqVO.getIsValid())
-            .eq(StringUtils.hasText(reqVO.getWarehouseCode()), WarehouseEntity::getWarehouseCode, reqVO.getWarehouseCode())
-            .eq(StringUtils.hasText(reqVO.getWarehouseNameEn()), WarehouseEntity::getWarehouseNameEn, reqVO.getWarehouseNameEn())
-            .eq(StringUtils.hasText(reqVO.getWarehouseNameCn()), WarehouseEntity::getWarehouseNameCn, reqVO.getWarehouseNameCn())
-            .eq(StringUtils.hasText(reqVO.getPortRole()), WarehouseEntity::getPortRole, reqVO.getPortRole())
-            .eq(StringUtils.hasText(reqVO.getWarehouseType()), WarehouseEntity::getWarehouseType, reqVO.getWarehouseType())
-            .eq(StringUtils.hasText(reqVO.getServiceType()), WarehouseEntity::getServiceType, reqVO.getServiceType())
-            .eq(StringUtils.hasText(reqVO.getPortCode()), WarehouseEntity::getPortCode, reqVO.getPortCode())
-            .eq(StringUtils.hasText(reqVO.getPhone()), WarehouseEntity::getPhone, reqVO.getPhone());
+            .like(StringUtils.hasText(reqVO.getWarehouseCode()), WarehouseEntity::getWarehouseCode, reqVO.getWarehouseCode())
+            .like(StringUtils.hasText(reqVO.getWarehouseNameEn()), WarehouseEntity::getWarehouseNameEn, reqVO.getWarehouseNameEn())
+            .like(StringUtils.hasText(reqVO.getWarehouseNameCn()), WarehouseEntity::getWarehouseNameCn, reqVO.getWarehouseNameCn())
+            .like(StringUtils.hasText(reqVO.getPortRole()), WarehouseEntity::getPortRole, reqVO.getPortRole())
+            .like(StringUtils.hasText(reqVO.getWarehouseType()), WarehouseEntity::getWarehouseType, reqVO.getWarehouseType())
+            .like(StringUtils.hasText(reqVO.getServiceType()), WarehouseEntity::getServiceType, reqVO.getServiceType())
+            .like(StringUtils.hasText(reqVO.getPortCode()), WarehouseEntity::getPortCode, reqVO.getPortCode())
+            .like(StringUtils.hasText(reqVO.getPhone()), WarehouseEntity::getPhone, reqVO.getPhone());
 
         //排序
         LambdaOrderByFactory.orderBy(wrapper, WarehouseEntity.class, reqVO.getOrderBys());

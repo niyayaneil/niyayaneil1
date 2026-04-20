@@ -82,10 +82,10 @@ public class RailCompanyServiceImpl implements RailCompanyService {
         IPage page = new Page(reqVO.getPageNum(), reqVO.getPageSize());
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper<RailCompanyEntity>()
             .eq(Objects.nonNull(reqVO.getIsValid()), RailCompanyEntity::getIsValid, reqVO.getIsValid())
-            .eq(StringUtils.hasText(reqVO.getRailroadCode()), RailCompanyEntity::getRailroadCode, reqVO.getRailroadCode())
-            .eq(StringUtils.hasText(reqVO.getRailroadNameEn()), RailCompanyEntity::getRailroadNameEn, reqVO.getRailroadNameEn())
-            .eq(StringUtils.hasText(reqVO.getRailroadNameCn()), RailCompanyEntity::getRailroadNameCn, reqVO.getRailroadNameCn())
-            .eq(StringUtils.hasText(reqVO.getPartnerCarriers()), RailCompanyEntity::getPartnerCarriers, reqVO.getPartnerCarriers());
+            .like(StringUtils.hasText(reqVO.getRailroadCode()), RailCompanyEntity::getRailroadCode, reqVO.getRailroadCode())
+            .like(StringUtils.hasText(reqVO.getRailroadNameEn()), RailCompanyEntity::getRailroadNameEn, reqVO.getRailroadNameEn())
+            .like(StringUtils.hasText(reqVO.getRailroadNameCn()), RailCompanyEntity::getRailroadNameCn, reqVO.getRailroadNameCn())
+            .like(StringUtils.hasText(reqVO.getPartnerCarriers()), RailCompanyEntity::getPartnerCarriers, reqVO.getPartnerCarriers());
 
         //排序
         LambdaOrderByFactory.orderBy(wrapper, RailCompanyEntity.class, reqVO.getOrderBys());
